@@ -13,9 +13,9 @@ class BottomBar_ extends StatefulWidget {
 
 class BottomBar_States extends State<BottomBar_> {
   dynamic selected;
+
   var heart = false;
   PageController controller = PageController();
-
   @override
   void dispose() {
     controller.dispose();
@@ -25,13 +25,11 @@ class BottomBar_States extends State<BottomBar_> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true, //to make floating action button notch transparent
+      extendBody: true, //to make floating action button notch Transparent
       bottomNavigationBar: StylishBottomBar(
         option: AnimatedBarOptions(
-          // iconSize: 32,
           barAnimation: BarAnimation.fade,
           iconStyle: IconStyle.animated,
-          // opacity: 0.3,
         ),
         items: [
           BottomBarItem(
@@ -42,9 +40,9 @@ class BottomBar_States extends State<BottomBar_> {
             backgroundColor: Color(0xff352c07),
             selectedColor: Colors.red,
             title: const Text('Home'),
-            badge: const Text('9+'),
-            showBadge: true,
-            badgeColor: Colors.red,
+            // badge: const Text('9+'),
+            // showBadge: true,
+            // badgeColor: Colors.red,
           ),
           BottomBarItem(
             icon: const Icon(Icons.star_border_rounded),
@@ -77,10 +75,11 @@ class BottomBar_States extends State<BottomBar_> {
         ],
         hasNotch: true,
         currentIndex: selected ?? 0,
-        onTap: (index) {
-          controller.jumpToPage(index);
+        notchStyle: NotchStyle.circle,
+        onTap: (i) {
+          controller.jumpToPage(i);
           setState(() {
-            selected = index;
+            selected = i;
           });
         },
       ),
@@ -96,15 +95,14 @@ class BottomBar_States extends State<BottomBar_> {
           color: Color(0xff352c07),
         ),
       ),
-
       body: SafeArea(
         child: PageView(
           controller: controller,
           children: const [
-            TestPage(),
-            Center(child: Text('page1')),
-            Center(child: Text('page2')),
-            Center(child: Text('page3')),
+            Center(child: Text('Home')),
+            Center(child: Text('Favorit')),
+            Center(child: Text('Shake')),
+            TestPage()
           ],
         ),
       ),

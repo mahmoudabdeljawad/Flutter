@@ -14,7 +14,7 @@ class TestPage extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ));
     return Scaffold(
-      body: Center(
+      body: Container(
         child: ElevatedButton(
           style: buttonStyle,
           onPressed: () {
