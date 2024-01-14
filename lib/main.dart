@@ -1,9 +1,10 @@
+import 'package:test_99915215/Category/AddCategory.dart';
+import 'package:test_99915215/Settings.dart';
 import 'package:test_99915215/Login.dart';
-import 'package:test_99915215/Test.dart';
-
 import 'Home.dart';
 import 'package:flutter/material.dart';
 import 'Component/ToolBar.dart';
+import 'Category/Category.dart';
 
 void main() => runApp(const Myapp());
 
@@ -21,11 +22,12 @@ class Myapp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/Home',
       routes: {
         '/': (context) => const LoginPage(),
         '/Home': (context) => const HomePage(),
-        '/Test': (context) => const TestPage()
+        '/Test': (context) => const Settings(),
+        '/CategoryAdd': (context) => const AddCategory(),
       },
     );
   }

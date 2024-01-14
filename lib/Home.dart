@@ -1,11 +1,19 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:test_99915215/Login.dart';
 import 'Component/BottomBar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(const HomePage());
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  @override
+  HomePageState createState() {
+    return HomePageState();
+  }
+}
 
+class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final ButtonStyle style = ElevatedButton.styleFrom(
@@ -15,21 +23,7 @@ class HomePage extends StatelessWidget {
           fontSize: 22,
           fontWeight: FontWeight.bold,
         ));
-
     return Scaffold(
-      body: Center(
-          child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          ElevatedButton(
-            style: style,
-            onPressed: () {
-              Navigator.pushNamed(context, '/Test');
-            },
-            child: const Text('Test'),
-          ),
-        ],
-      )),
       bottomNavigationBar: const BottomBar_(),
     );
   }

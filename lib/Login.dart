@@ -1,24 +1,31 @@
 import 'dart:convert';
-import 'dart:html';
 import 'package:flutter/material.dart';
-import 'Component/ToolBar.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:http/http.dart' as http;
-import 'package:json_annotation/json_annotation.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_99915215/Functions/CheckAuth.dart';
 
 class User {
-  String email;
-  String password;
+  String? email;
+  String? password;
+  int? Id;
 
-  User({
-    required this.email,
-    required this.password,
-  });
+  User({this.email, this.password});
+
+  User.fromJson(Map<String, dynamic> json) {
+    email = json['email'];
+    password = json['password'];
+    Id = json['id'];
+  }
+
   Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'password': password,
-    };
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['email'] = this.email;
+    data['password'] = this.password;
+    data['id'] = this.Id;
+
+    return data;
   }
 }
 
@@ -26,21 +33,24 @@ void main() => runApp(const LoginPage());
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
+
   @override
   Widget build(BuildContext context) {
+    // performAuthCheck();
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xffffc000),
+        backgroundColor: const Color(0xff000000),
         toolbarHeight: 200,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-              bottom: new Radius.elliptical(
-                  MediaQuery.of(context).size.width, 53.0)),
+            bottom:
+                new Radius.elliptical(MediaQuery.of(context).size.width, 53.0),
+          ),
         ),
       ), // Your app bar
-      body: new Container(
+      body: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 33,
           horizontal: 22,
@@ -64,6 +74,22 @@ class LoginPageForm extends State<LoginFormWidget> {
   final _formKey = GlobalKey<FormState>();
   String? name;
   User user = User(email: "", password: "");
+
+  @override
+  void initState() {
+    super.initState();
+    alredylogin();
+  }
+
+  void alredylogin() async {
+    if (await checkAuth()) {
+      if (!mounted) {
+        return;
+      }
+      Navigator.of(context).pushReplacementNamed('/Home');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -152,23 +178,33 @@ class LoginPageForm extends State<LoginFormWidget> {
                       try {
                         final response = await http.post(
                           url,
-                          body: body,
+                          headers: {
+                            "Content-type": "application/json",
+                            "Accept": "application/json"
+                          },
+                          body:
+                              body, // Pass the map directly, http.post will handle the conversion
                         );
 
                         if (response.statusCode == 200) {
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
                           // Handle success
-                          print('POST request successful');
-                          print(response.body);
+                          await prefs.setString("Auth", response.body);
+                          // SessionManager().setString("key", response.body);
+                          Navigator.pushNamed(
+                            context,
+                            '/Home',
+                          );
                         } else {
-                          // Handle errors
-                          print(
-                              'POST request failed with status: ${response.statusCode}');
+                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Wrong Email Or Password'),
+                            ),
+                          );
                         }
-                      } catch (error) {
-                        // Handle exceptions
-                        print('Error during POST request: $error');
-                      }
-                      // Navigator.pushNamed(context, '/Home');
+                      } catch (error) {}
                     }
                   },
                   child: const Text(

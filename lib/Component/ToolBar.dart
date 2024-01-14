@@ -8,7 +8,6 @@ void main() => runApp(const ToolBar(
 class ToolBar extends StatelessWidget implements PreferredSizeWidget {
   final String pageTitile;
   final bool automaticallyImplyLeading;
-
   const ToolBar(
       {required this.pageTitile,
       required this.automaticallyImplyLeading,
@@ -17,35 +16,38 @@ class ToolBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    const AppBarTheme _style = AppBarTheme(
-      backgroundColor: Colors.black,
-      centerTitle: true,
-      shadowColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(2), top: Radius.circular(2)),
-      ),
-    );
-
     return AppBar(
+      elevation: 10,
+      shadowColor: Color(0xffaba9a9),
+      backgroundColor: const Color(0xff030303),
       automaticallyImplyLeading: automaticallyImplyLeading,
-      leading:
-          automaticallyImplyLeading ? BackButton(color: Colors.white) : null,
-      backgroundColor: Colors.black,
-      centerTitle: true,
-      shadowColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(2), top: Radius.circular(2)),
+      leading: Navigator.canPop(context)
+          ? IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+                size: 33,
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            )
+          : null,
+      iconTheme: const IconThemeData(color: Colors.white),
+      toolbarHeight: MediaQuery.of(context).size.height / 5,
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
       ),
-      title: Text(
-        pageTitile,
-        style:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      centerTitle: true,
+      title: Text(pageTitile),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+            bottom:
+                new Radius.elliptical(MediaQuery.of(context).size.width, 53.0)),
       ),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(140);
 }

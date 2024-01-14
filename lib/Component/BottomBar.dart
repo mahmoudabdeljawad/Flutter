@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
-import 'package:test_99915215/Home.dart';
-import 'package:test_99915215/Test.dart';
+import 'package:test_99915215/Settings.dart';
+import 'package:test_99915215/Dashboard.dart';
+import 'package:test_99915215/Functions/CheckAuth.dart';
+import 'package:test_99915215/Functions/logout.dart';
+
+void main() => runApp(const BottomBar_());
 
 class BottomBar_ extends StatefulWidget {
   const BottomBar_({super.key});
@@ -13,13 +17,17 @@ class BottomBar_ extends StatefulWidget {
 
 class BottomBar_States extends State<BottomBar_> {
   dynamic selected;
-
   var heart = false;
   PageController controller = PageController();
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -45,12 +53,12 @@ class BottomBar_States extends State<BottomBar_> {
             // badgeColor: Colors.red,
           ),
           BottomBarItem(
-            icon: const Icon(Icons.star_border_rounded),
-            selectedIcon: const Icon(Icons.star_rounded),
+            icon: const Icon(Icons.inventory),
+            selectedIcon: const Icon(Icons.inventory),
             selectedColor: Colors.red,
             // unSelectedColor: Colors.purple,
             backgroundColor: Color(0xff352c07),
-            title: const Text('Star'),
+            title: const Text('Setting'),
           ),
           BottomBarItem(
               icon: const Icon(
@@ -85,9 +93,13 @@ class BottomBar_States extends State<BottomBar_> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          controller.jumpToPage(5);
           setState(() {
-            heart = !heart;
+            selected = 0;
           });
+          // setState(() {
+          //   heart = !heart;
+          // });
         },
         backgroundColor: Colors.white,
         child: Icon(
@@ -98,11 +110,19 @@ class BottomBar_States extends State<BottomBar_> {
       body: SafeArea(
         child: PageView(
           controller: controller,
-          children: const [
-            Center(child: Text('Home')),
-            Center(child: Text('Favorit')),
-            Center(child: Text('Shake')),
-            TestPage()
+          children: [
+            const DashBoard(),
+            const Settings(),
+            const Center(child: Text('Shake')),
+            Container(
+                child: Center(
+              child: ElevatedButton(
+                  onPressed: () => {
+                        performlogout(),
+                        Navigator.pushNamed(context, '/'),
+                      },
+                  child: Text('Logout')),
+            )),
           ],
         ),
       ),
